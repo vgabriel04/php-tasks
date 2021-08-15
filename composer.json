@@ -1,0 +1,16 @@
+{
+    "name": "victor/php-task",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Vgabriel04",
+            "email": "vgss04@outlook.com"
+        }
+    ],
+    "require": {},
+    "autoload": {
+        "psr-4": {
+            "PhpTask\\": "src/"
+        }
+    }
+}

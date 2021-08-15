@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * esta função devolve uma lista de tarefas da API do backend
+       */
+      async function carregaTarefas() {
+        let tarefasResponse = await fetch('task-index.php', {
+          method: 'GET'
+        })
+        tarefas = await tarefasResponse.json()
+        return tarefas
+      }
+
+      async function criaTarefa() {
+        let tituloTarefa = document.getElementById('titulo').value
+        let descricaoTarefa = document.getElementById('descricao').value
+        let data = {
+          titulo: tituloTarefa,
+          descricao: descricaoTarefa
+        }
+        let tarefasResponse = await fetch('task-create.php', {
+          method: 'POST',
+          body: JSON.stringify(data) //é a mesma coisa do json_encode do php
+        })
+
+        tarefasResponseDado = await tarefasResponse.json()
+        // if (tarefasResponse.ok){
+        alert(tarefasResponseDado.mensagem)
+        // }else{
+        //   alert(tarefasResponseDado.mensagem)
+        // }
+        console.log(tarefasResponseDado)
+
+        renderTarefas()
+      }
+
+      async function excluiTarefa(tarefaId) {
+        let tarefasResponse = await fetch(
+          `task-delete.php?taskId=${tarefaId}`,
+          {
+            method: 'DELETE'
+          }
+        )
+        tarefasResponseDado = await tarefasResponse.json()
+        alert(tarefasResponseDado.mensagem)
+        renderTarefas()
+      }
+      async function concluiTarefas(tarefaId) {
+        let response = await fetch(`task-conclusao.php?taskId=${tarefaId}`, {
+          method: 'GET'
+        })
+        responseDado = await response.json()
+        alert(responseDado.mensagem)
+        renderTarefas()
+      }
+
+      //função que vai receber as tarefas, e exibir o resultado na tela
+      async function renderTarefas() {
+        let tarefas = await carregaTarefas()
+        let divListaTarefas = document.getElementById('lista-tarefas')
+        console.log(tarefas)
+        console.log(divListaTarefas)
+
+        let meuHtmlParaRenderizar = '<p>Lista de tarefas</p>'
+        for (let i = 0; i < tarefas.length; i++) {
+          let concluido = `<input type="checkbox" id="scales" name="scales" onclick="concluiTarefas(${tarefas[i].id})">`
+          if (tarefas[i].concluido == '1') {
+            concluido = `<input type="checkbox" id="scales" name="scales" checked onclick="concluiTarefas(${tarefas[i].id})">`
+          }
+
+          meuHtmlParaRenderizar += `<div class="linhaTarefa"><div> ${concluido} ${tarefas[i].titulo} : ${tarefas[i].descricao} : ${tarefas[i].dataCriacao} </div><div> <a class="btn sm" href = "edita-tarefa.html?tarefaId=${tarefas[i].id}"> Editar </a> <a class="btn sm" onclick="excluiTarefa(${tarefas[i].id})"> Excluir </a> </div></div>`
+        }
+        divListaTarefas.innerHTML = meuHtmlParaRenderizar
+      }
+      renderTarefas()
+    </script>
+
+    <form>
+      <label for="titulo">Título</label><br />
+      <input
+        id="titulo"
+        type="text"
+        placeholder="coloque o titulo da sua tarefa"
+        name="titulo"
+      /><br /><br />
+
+      <label for="descricao">Descrição</label><br />
+      <input id="descricao" type="text" name="descricao" /><br /><br />
+
+      <a class="btn" onclick="criaTarefa()">Criar</a>
+    </form>
+
+    <div id="lista-tarefas"></div>
+  </body>
+</html>

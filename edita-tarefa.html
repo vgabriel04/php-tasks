@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+
+  </head>
+  <body>
+    <form>
+      <label for="titulo">Titulo</label><br />
+      <input
+        id="titulo"
+        type="text"
+        placeholder="coloque o titulo da sua tarefa"
+        name="titulo"
+      /><br /><br />
+
+      <label for="descricao">Descricação</label><br />
+      <input id="descricao" type="text" name="descricao" /><br /><br />
+
+      <button type="button" onclick="editaTarefa()">Alterar</button>
+      
+    </form>
+
+    <script>
+      async function carregaTarefa() {
+        const parametrosUrl = new URLSearchParams(location.search)
+        const tarefaId = parametrosUrl.get('tarefaId')
+
+        let carregaTarefa = await fetch(`task-get.php?taskId=${tarefaId}`, {
+          method: 'GET'
+        })
+        let tarefa = await carregaTarefa.json()
+        return tarefa
+      }
+
+      function preencheFormPreliminar(tarefa) {
+        let inputTitulo = document.getElementById('titulo')
+        let inputDescricao = document.getElementById('descricao')
+        inputTitulo.value = tarefa.titulo
+        inputDescricao.value = tarefa.descricao
+      }
+
+      async function editaTarefa (){
+        let tituloTarefa = document.getElementById("titulo").value
+        let descricaoTarefa = document.getElementById ("descricao").value
+
+        let data = {
+          "titulo" : tituloTarefa,
+          "descricao" : descricaoTarefa,
+        }
+        let tarefasResponse = await fetch (`task-update.php?taskId=${taskId}`, {
+          method: 'PUT',
+          body: JSON.stringify(data)
+        })
+
+        tarefasResponseDado = await tarefasResponse.json()
+        // if (tarefasResponse.ok){
+          alert(tarefasResponseDado.mensagem)//vai buscar a mensagem no PHP e joga na tela
+        // }else{
+        //   alert(tarefasResponseDado.mensagem)
+        // }
+        console.log (tarefasResponseDado)
+      }
+      let taskId = null;
+
+      carregaTarefa().then(tarefa => {
+        preencheFormPreliminar(tarefa)
+        taskId = tarefa.id
+      })
+    </script>
+  </body>
+</html>

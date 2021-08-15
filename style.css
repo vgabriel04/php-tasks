@@ -1,0 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;800&display=swap');
+
+body {
+  font-family: 'Poppins', sans-serif;
+}
+
+.linhaTarefa {
+  /* background: #eeeeee; */
+  /* background: red; */
+  border-bottom: 1px solid #e1e1e1;
+
+  padding: 10px 10px;
+  border-radius: 5px;
+  /* margin: 15px 0px; */
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+a.btn,
+button.btn,
+input.btn {
+  /* border: 1px solid black; */
+  border-radius: 5px;
+  padding: 5px;
+  display: inline-block;
+  margin: 5px 0px;
+  background: #eeeeee;
+  cursor: pointer;
+}
+
+a.btn:hover,
+button.btn:hover,
+input.btn:hover {
+  background: #5599ff22;
+}
+
+a.btn.sm,
+button.btn.sm,
+input.btn.sm {
+  font-size: 80%;
+}
