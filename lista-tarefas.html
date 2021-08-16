@@ -77,7 +77,10 @@
             concluido = `<input type="checkbox" id="scales" name="scales" checked onclick="concluiTarefas(${tarefas[i].id})">`
           }
 
-          meuHtmlParaRenderizar += `<div class="linhaTarefa"><div> ${concluido} ${tarefas[i].titulo} : ${tarefas[i].descricao} : ${tarefas[i].dataCriacao} </div><div> <a class="btn sm" href = "edita-tarefa.html?tarefaId=${tarefas[i].id}"> Editar </a> <a class="btn sm" onclick="excluiTarefa(${tarefas[i].id})"> Excluir </a> </div></div>`
+          let dataCriacao = new Date(tarefas[i].datacriacao)
+          dataCriacao = `${dataCriacao.getDay()}/${dataCriacao.getMonth()}/${dataCriacao.getFullYear()}`
+          console.log('dataCriacao', dataCriacao)
+          meuHtmlParaRenderizar += `<div class="linhaTarefa"><div> ${concluido} ${dataCriacao} -- ${tarefas[i].titulo} : ${tarefas[i].descricao}</div><div class="flex-shrink-none"> <a class="btn sm" href = "edita-tarefa.html?tarefaId=${tarefas[i].id}"> Editar </a> <a class="btn sm" onclick="excluiTarefa(${tarefas[i].id})"> Excluir </a> </div></div>`
         }
         divListaTarefas.innerHTML = meuHtmlParaRenderizar
       }

@@ -18,6 +18,10 @@ body {
   align-items: center;
 }
 
+.flex-shrink-none {
+  flex-shrink: 0;
+}
+
 a {
   text-decoration: none;
   color: inherit;

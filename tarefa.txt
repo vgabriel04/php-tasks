@@ -1,2 +1,1 @@
-buscar tarefa no BD, se estiver concluida ela receberá false para não ficar mais conclusa
-Se 
+backend com ponto único de acesso

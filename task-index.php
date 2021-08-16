@@ -9,7 +9,7 @@ try {
 
     $pdo = DbConnection::get();
 
-    $sql = "select * from tasks";
+    $sql = "select * from tasks order by dataCriacao desc";
     $statement = $pdo->prepare($sql);
     $tasks = [];
     if ($statement->execute()) {
@@ -20,7 +20,7 @@ try {
         JsonResponse::send($mensagem, 500);
     }
 } catch (\Exception $e) {
-    $mensagem = ['mensagem' => $e->getMessage() ];
+    $mensagem = ['mensagem' => $e->getMessage()];
     JsonResponse::send($mensagem, 500);
     // $jsonResponse->send($mensagem, 500);
 }
