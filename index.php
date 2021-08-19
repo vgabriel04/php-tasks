@@ -8,16 +8,16 @@ $body = file_get_contents("php://input");
 $body = json_decode($body, true);
 
 
-$router = new Router();
-$router->add('GET', '/pudim', 'CozinhaController', 'cozinhaPudim');
-$router->add('GET', '/lasanha', 'CozinhaController', 'cozinhaLasanha');
-$router->add('GET', '/assistirTv', 'SalaController', 'assistirTv');
+$router = new Router(); //para instanciar a classe: new "Nome da classe"
+
+$router->get('/pudim', 'CozinhaController', 'cozinhaPudim');
+$router->post('/lasanha', 'CozinhaController', 'cozinhaLasanha');
+$router->put('/assistirTv', 'SalaController', 'assistirTv');
+$router->delete('/jogarVideogame', 'SalaController', 'jogarVideogame');
 
 $router->exibeDump();
 
-var_export($router->findRoute('GET', 'SalaController'));
-
-
+var_dump($router->findRoute('DELETE', '/jogarVideogame'));
 
 
 // $response = callController();

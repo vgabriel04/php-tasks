@@ -2,42 +2,66 @@
 
 namespace PhpTask\Lib;
 
+use PhpTask\Lib\Route;
+
 class Router
 {
-    public $rotas;
+    public array $routes;
 
     public function __construct()
     {
-        $this->rotas = [];
+        $this->routes = [];
     }
 
-    public function add($method, $path, $controller, $action)
+    private function addRoute(Route $route, $path, $controller, $action)
     {
-        $this->rotas[] = [
-            'method' => $method,
-            'path' => $path,
-            'controller' => $controller,
-            'action' => $action
-        ];
-        // array_push($rotas, []);
+        $route->withPath($path)
+            ->withController($controller)
+            ->withAction($action);
+
+        $this->routes[] = $route;
+    }
+
+    public function get($path, $controller, $action)
+    {
+        $route = Route::get();
+        $route = $this->addRoute($route, $path, $controller, $action);
+    }
+
+    public function post($path, $controller, $action)
+    {
+        $route = Route::post();
+        $route = $this->addRoute($route, $path, $controller, $action);
+    }
+
+    public function put($path, $controller, $action)
+    {
+        $route = Route::put();
+        $route = $this->addRoute($route, $path, $controller, $action);
+    }
+
+    public function delete($path, $controller, $action)
+    {
+        $route = Route::delete();
+        $route = $this->addRoute($route, $path, $controller, $action);
     }
 
     public function exibeDump()
     {
         echo "<pre>";
-        var_export($this->rotas);
+        var_export($this->routes);
         echo "</pre>";
     }
 
 
-    public function findRoute($method, $controller)
+    public function findRoute($method, $path)
     {
-        foreach ($this->rotas as $key => $rota) {
+        foreach ($this->routes as $key => $route) {
             if (
-                $method == $rota['method']
-                && $controller == $rota['controller']
+                $method == $route->method
+                && $path == $route->path
             ) {
-                return $rota;
+                return $route;
             }
         }
         throw new \Exception("Not Found 404", 1);
