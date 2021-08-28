@@ -13,7 +13,8 @@
        * esta função devolve uma lista de tarefas da API do backend
        */
       async function carregaTarefas() {
-        let tarefasResponse = await fetch('task-index.php', {
+        // let tarefasResponse = await fetch('task-index.php', {
+        let tarefasResponse = await fetch('/task', {
           method: 'GET'
         })
         tarefas = await tarefasResponse.json()
@@ -27,7 +28,7 @@
           titulo: tituloTarefa,
           descricao: descricaoTarefa
         }
-        let tarefasResponse = await fetch('task-create.php', {
+        let tarefasResponse = await fetch('/task', {
           method: 'POST',
           body: JSON.stringify(data) //é a mesma coisa do json_encode do php
         })
@@ -45,7 +46,7 @@
 
       async function excluiTarefa(tarefaId) {
         let tarefasResponse = await fetch(
-          `task-delete.php?taskId=${tarefaId}`,
+          `/task?taskId=${tarefaId}`,
           {
             method: 'DELETE'
           }
@@ -54,8 +55,9 @@
         alert(tarefasResponseDado.mensagem)
         renderTarefas()
       }
+
       async function concluiTarefas(tarefaId) {
-        let response = await fetch(`task-conclusao.php?taskId=${tarefaId}`, {
+        let response = await fetch(`/task/concluir?taskId=${tarefaId}`, {
           method: 'GET'
         })
         responseDado = await response.json()

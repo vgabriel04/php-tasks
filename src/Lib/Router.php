@@ -52,13 +52,11 @@ class Router
         var_export($this->routes);
         echo "</pre>";
     }
-
-
     public function findRoute($method, $path)
     {
         foreach ($this->routes as $key => $route) {
             if (
-                $method == $route->method
+                $method == $route->method//acessar atrib. privado
                 && $path == $route->path
             ) {
                 return $route;

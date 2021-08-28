@@ -2,17 +2,46 @@
 
 namespace PhpTask\Lib;
 
+use Exception;
 
 class Route
 {
-    public $method;
-    public $path;
-    public $controller;
-    public $action;
+    private $method;
+    private $path;
+    private $controller;
+    private $action;
 
     private function __construct($method)
     {
         $this->method = $method;
+    }
+
+    public function setMethod($method)
+    {
+        if (
+            $method !== 'GET' &&
+            $method !== 'POST' &&
+            $method !== 'PUT' &&
+            $method !== 'DELETE'
+        ) {
+            throw new Exception("Metodo '$method' não aceito!");
+        } else {
+            $this->method = $method;
+        }
+    }
+
+    public function __set($atrib, $value)
+    {
+        if ($atrib == 'method') {
+            $this->setMethod($value);
+        } else {
+            $this->$atrib = $value;
+        }
+    }
+
+    public function __get($atrib)
+    {
+        return $this->$atrib;
     }
 
     public static function get()
@@ -49,4 +78,8 @@ class Route
         $this->action = $action;
         return $this;
     }
+
+   
+
+
 }

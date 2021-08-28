@@ -45,6 +45,8 @@
       }
 
       async function editaTarefa (){
+        const parametrosUrl = new URLSearchParams(location.search)
+        const tarefaId = parametrosUrl.get('tarefaId')
         let tituloTarefa = document.getElementById("titulo").value
         let descricaoTarefa = document.getElementById ("descricao").value
 
@@ -52,7 +54,7 @@
           "titulo" : tituloTarefa,
           "descricao" : descricaoTarefa,
         }
-        let tarefasResponse = await fetch (`task-update.php?taskId=${taskId}`, {
+        let tarefasResponse = await fetch (`/task?taskId=${tarefaId}`, {
           method: 'PUT',
           body: JSON.stringify(data)
         })

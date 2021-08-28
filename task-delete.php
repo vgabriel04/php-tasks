@@ -10,7 +10,7 @@ $body = json_decode($body, true);
 
 
 try {
-    if (isset($_GET['taskId']) == FALSE || $_GET['taskId'] == NULL) {
+    if (isset($body['taskId']) == FALSE || $body['taskId'] == NULL) {
         $mensagem = "Necessario preencher o campo taskId";
         $retorno = [
             "mensagem" => $mensagem

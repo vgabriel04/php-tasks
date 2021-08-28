@@ -8,7 +8,7 @@ use PhpTask\Lib\DbConnection;
 try {
     $pdo = DbConnection::get();
 
-    $taskId = $_GET["taskId"];
+    $taskId = $body["taskId"];
 
     $sql = "select * from tasks where id = :taskId";
     $statement = $pdo->prepare($sql);
