@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
+
     <title>Document</title>
   </head>
   <body>
@@ -45,12 +46,9 @@
       }
 
       async function excluiTarefa(tarefaId) {
-        let tarefasResponse = await fetch(
-          `/task?taskId=${tarefaId}`,
-          {
-            method: 'DELETE'
-          }
-        )
+        let tarefasResponse = await fetch(`/task?taskId=${tarefaId}`, {
+          method: 'DELETE'
+        })
         tarefasResponseDado = await tarefasResponse.json()
         alert(tarefasResponseDado.mensagem)
         renderTarefas()
@@ -78,11 +76,12 @@
           if (tarefas[i].concluido == '1') {
             concluido = `<input type="checkbox" id="scales" name="scales" checked onclick="concluiTarefas(${tarefas[i].id})">`
           }
-
-          let dataCriacao = new Date(tarefas[i].datacriacao)
-          dataCriacao = `${dataCriacao.getDay()}/${dataCriacao.getMonth()}/${dataCriacao.getFullYear()}`
-          console.log('dataCriacao', dataCriacao)
-          meuHtmlParaRenderizar += `<div class="linhaTarefa"><div> ${concluido} ${dataCriacao} -- ${tarefas[i].titulo} : ${tarefas[i].descricao}</div><div class="flex-shrink-none"> <a class="btn sm" href = "edita-tarefa.html?tarefaId=${tarefas[i].id}"> Editar </a> <a class="btn sm" onclick="excluiTarefa(${tarefas[i].id})"> Excluir </a> </div></div>`
+          // let dataCriacao = new Date(tarefas[i].datacriacao)
+          // console.log('dataCriacao', dataCriacao)
+          // dataCriacaoExtenso = `${dataCriacao.getDate()}/${dataCriacao.getMonth()+1}/${dataCriacao.getFullYear()}`
+          // console.log('dataCriacaoExtenso', dataCriacaoExtenso)
+          dataCriacaoExtenso = tarefas[i].dataCriacaoReadable
+          meuHtmlParaRenderizar += `<div class="linhaTarefa"><div> ${concluido} ${dataCriacaoExtenso} -- ${tarefas[i].titulo} : ${tarefas[i].descricao}</div><div class="flex-shrink-none"> <a class="btn sm" href = "edita-tarefa.html?tarefaId=${tarefas[i].id}"> Editar </a> <a class="btn sm" onclick="excluiTarefa(${tarefas[i].id})"> Excluir </a> </div></div>`
         }
         divListaTarefas.innerHTML = meuHtmlParaRenderizar
       }

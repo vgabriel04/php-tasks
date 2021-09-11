@@ -32,6 +32,7 @@ class Route
 
     public function __set($atrib, $value)
     {
+        $atrib = 'algo';
         if ($atrib == 'method') {
             $this->setMethod($value);
         } else {
@@ -78,8 +79,5 @@ class Route
         $this->action = $action;
         return $this;
     }
-
-   
-
 
 }

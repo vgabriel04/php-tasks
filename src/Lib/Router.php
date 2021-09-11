@@ -62,6 +62,6 @@ class Router
                 return $route;
             }
         }
-        throw new \Exception("Not Found 404", 1);
+        throw new \Exception("Rota não encontrada", 1);
     }
 }

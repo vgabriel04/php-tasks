@@ -30,7 +30,7 @@
         const parametrosUrl = new URLSearchParams(location.search)
         const tarefaId = parametrosUrl.get('tarefaId')
 
-        let carregaTarefa = await fetch(`task-get.php?taskId=${tarefaId}`, {
+        let carregaTarefa = await fetch(`/task/find?taskId=${tarefaId}`, {
           method: 'GET'
         })
         let tarefa = await carregaTarefa.json()
