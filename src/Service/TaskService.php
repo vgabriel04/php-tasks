@@ -8,33 +8,16 @@ use PhpTask\Lib\DbConnection;
 use PDO;
 
 use DateTime;
+use PhpTask\Lib\Repository;
 
 class TaskService
 {
     public function findAll()
     {
-        $pdo = DbConnection::get();
 
-        $sql = "select * from tasks order by dataCriacao desc";
-        $statement = $pdo->prepare($sql);
-        $tasks = [];
+        $repository = Repository::forClass(Task::class);
 
-        if (!$statement->execute()) {
-            throw new Exception("Erro de banco!");
-        }
-
-        $tasks = $statement->fetchAll(\PDO::FETCH_ASSOC);
-
-        foreach ($tasks as $key => $task) {
-            $taskObject = new Task();
-            $taskObject->id = $task['id'];
-            $taskObject->titulo = $task['titulo'];
-            $taskObject->descricao = $task['descricao'];
-            $taskObject->dataCriacao = $task['datacriacao'];
-            $taskObject->dataAtualizacao = $task['dataatualizacao'];
-            $taskObject->concluido = $task['concluido'];
-            $tasks[$key] = $taskObject;
-        }
+        $tasks = $repository->findAll();
 
         foreach ($tasks as $key => $task) {
             $tasks[$key] = $task->fillReadableDates();

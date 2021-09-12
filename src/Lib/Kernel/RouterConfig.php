@@ -17,6 +17,13 @@ abstract class RouterConfig
         $router->delete('/task', 'TaskController', 'delete');
         $router->get('/task/concluir', 'TaskController', 'concluir');
 
+
+        $router->get('/situacoes', 'SituacaoController', 'index');
+        // $router->get('/situacao/find', 'TaskController', 'find');
+        $router->post('/situacoes', 'SituacaoController', 'create');
+        // $router->put('/task', 'TaskController', 'update');
+        // $router->delete('/task', 'TaskController', 'delete');
+
         return $router;
     }
 }

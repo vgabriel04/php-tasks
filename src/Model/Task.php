@@ -2,8 +2,12 @@
 
 namespace PhpTask\Model;
 
-class Task
+use PhpTask\Model\Model;
+
+class Task extends Model
 {
+    const tablename = 'tasks';
+
     public $id;
     public $titulo;
     public $descricao;
@@ -31,5 +35,17 @@ class Task
         $this->concluido = $concluido;
 
         return $this;
+    }
+
+    public static function mapArrayToObject($arrayData)
+    {
+        $taskObject = new self();
+        $taskObject->id = $arrayData['id'];
+        $taskObject->titulo = $arrayData['titulo'];
+        $taskObject->descricao = $arrayData['descricao'];
+        $taskObject->dataCriacao = $arrayData['datacriacao'];
+        $taskObject->dataAtualizacao = $arrayData['dataatualizacao'];
+        $taskObject->concluido = $arrayData['concluido'];
+        return $taskObject;
     }
 }

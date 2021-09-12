@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      /**
+       * esta função devolve uma lista de situacoes da API do backend
+       */
+      async function carregaSituacoes() {
+        let response = await fetch('/situacoes', {
+          method: 'GET'
+        })
+        situacoes = await response.json()
+        return situacoes
+      }
+
+      async function criaSituacao() {
+        let situacao = document.getElementById('situacao').value
+        let ordem = document.getElementById('ordem').value
+        let data = {
+          situacao: situacao,
+          ordem: ordem
+        }
+        let response = await fetch('/situacoes', {
+          method: 'POST',
+          body: JSON.stringify(data) //é a mesma coisa do json_encode do php
+        })
+
+        dado = await response.json()
+        alert(dado.mensagem)
+        console.log(dado)
+        renderSituacoes()
+      }
+
+      async function excluiSituacao(situacaoId) {
+        let response = await fetch(`/situacoes?situacaoId=${situacaoId}`, {
+          method: 'DELETE'
+        })
+        dado = await response.json()
+        alert(dado.mensagem)
+        renderSituacoes()
+      }
+
+      //função que vai receber as situacoes, e exibir o resultado na tela
+      async function renderSituacoes() {
+        let situacoes = await carregaSituacoes()
+        let divListaSituacoes = document.getElementById('lista-situacoes')
+        console.log(situacoes)
+        console.log(divListaSituacoes)
+
+        let meuHtmlParaRenderizar = '<p>Lista de Situacoes</p>'
+        for (let i = 0; i < situacoes.length; i++) {
+          meuHtmlParaRenderizar += `<div class="linhaSituacao"><div>${situacoes[i].situacao} : ${situacoes[i].ordem}</div><div class="flex-shrink-none"> <a class="btn sm" href = "edita-situacao.html?situacaoId=${situacoes[i].id}"> Editar </a> <a class="btn sm" onclick="excluiSituacao(${situacoes[i].id})"> Excluir </a> </div></div>`
+        }
+        divListaSituacoes.innerHTML = meuHtmlParaRenderizar
+      }
+      renderSituacoes()
+    </script>
+
+    <h1>PHP Task</h1>
+
+    <div>
+      <a class="btn" href="lista-tarefas.html">Tarefas</a>
+      <a class="btn" href="lista-situacoes.html">Situacoes</a>
+    </div>
+
+    <form>
+      <label for="situacao">situacao</label><br />
+      <input
+        id="situacao"
+        type="text"
+        placeholder="coloque o situacao da sua situacao"
+        name="situacao"
+      /><br /><br />
+
+      <label for="ordem">ordem</label><br />
+      <input id="ordem" type="text" name="ordem" /><br /><br />
+
+      <a class="btn" onclick="criaSituacao()">Criar</a>
+    </form>
+
+    <div id="lista-situacoes"></div>
+  </body>
+</html>
