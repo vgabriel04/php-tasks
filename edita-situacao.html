@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <title>Document</title>
+  </head>
+  <body>
+    <form>
+      <label for="situacao">situacao</label><br />
+      <input
+        id="situacao"
+        type="text"
+        placeholder="coloque a situação da sua situacao"
+        name="situacao"
+      /><br /><br />
+
+      <label for="ordem">ordem</label><br />
+      <input id="ordem" type="text" name="ordem" /><br /><br />
+
+      <button type="button" onclick="editaSituacao()">Alterar</button>
+    </form>
+
+    <script>
+      async function carregaSituacao() {
+        const parametrosUrl = new URLSearchParams(location.search)
+        const situacaoId = parametrosUrl.get('situacaoId')
+
+        let carregaSituacao = await fetch(
+          `/situacoes/find?situacaoId=${situacaoId}`,
+          {
+            method: 'GET'
+          }
+        )
+        let situacao = await carregaSituacao.json()
+        return situacao
+      }
+
+      function preencheFormPreliminar(situacao) {
+        let inputOrdem = document.getElementById('ordem')
+        let inputDescricao = document.getElementById('situacao')
+        inputOrdem.value = situacao.ordem
+        inputDescricao.value = situacao.situacao
+      }
+
+      async function editaSituacao() {
+        const parametrosUrl = new URLSearchParams(location.search)
+        const situacaoId = parametrosUrl.get('situacaoId')
+        let ordemSituacao = document.getElementById('ordem').value
+        let situacaoSituacao = document.getElementById('situacao').value
+
+        let data = {
+          ordem: ordemSituacao,
+          situacao: situacaoSituacao
+        }
+        let situacoesResponse = await fetch(
+          `/situacoes?situacaoId=${situacaoId}`,
+          {
+            method: 'PUT',
+            body: JSON.stringify(data)
+          }
+        )
+
+        situacoesResponseDado = await situacoesResponse.json()
+        // if (situacoesResponse.ok){
+        alert(situacoesResponseDado.mensagem) //vai buscar a mensagem no PHP e joga na tela
+        // }else{
+        //   alert(situacoesResponseDado.mensagem)
+        // }
+        console.log(situacoesResponseDado)
+      }
+      let situacaoId = null
+
+      carregaSituacao().then(situacao => {
+        preencheFormPreliminar(situacao)
+        situacaoId = situacao.id
+      })
+    </script>
+  </body>
+</html>

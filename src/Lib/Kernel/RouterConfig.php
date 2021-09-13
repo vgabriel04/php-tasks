@@ -21,7 +21,7 @@ abstract class RouterConfig
         $router->get('/situacoes', 'SituacaoController', 'index');
         // $router->get('/situacao/find', 'TaskController', 'find');
         $router->post('/situacoes', 'SituacaoController', 'create');
-        // $router->put('/task', 'TaskController', 'update');
+        $router->put('/situacoes', 'SituacaoController', 'update');
         // $router->delete('/task', 'TaskController', 'delete');
 
         return $router;

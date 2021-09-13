@@ -48,46 +48,38 @@ class SituacaoService
     //     return $taskObject;
     // }
 
-    public function create($task)
+    public function create($situacao)
     {
         $pdo = DbConnection::get();
 
-        $sql = "insert into tasks (titulo, descricao, dataCriacao, dataAtualizacao) values (:titulo, :descricao, :dataCriacao, :dataAtualizacao)";
-        $dataCricao = date('Y-m-d H:i:s');
-        $dataAtualizacao = date('Y-m-d H:i:s');
+        $sql = "insert into situacao (situacao, ordem) values (:situacao, :ordem)";
 
         $statement = $pdo->prepare($sql);
 
-        $statement->bindValue(':titulo', $task->titulo);
-        $statement->bindValue(':descricao', $task->descricao);
-        $statement->bindValue(':dataCriacao', $dataCricao);
-        $statement->bindValue(':dataAtualizacao', $dataAtualizacao);
-
+        $statement->bindValue(':situacao', $situacao->situacao);
+        $statement->bindValue(':ordem', $situacao->ordem);
+ 
         if (!$statement->execute()) {
             throw new Exception("Erro de banco!");
         }
     }
 
-    // public function update($task)
-    // {
-    //     $pdo = DbConnection::get();
+    public function update($situacao)
+    {
+        $pdo = DbConnection::get();
 
-    //     $sql = "update tasks set titulo = :titulo, descricao = :descricao, dataAtualizacao = :dataAtualizacao, concluido = :concluido where id = :taskId";
+        $sql = "update situacao set situacao = :situacao, ordem = :ordem where id = :situacaoId";
 
-    //     $dataAtualizacao = date('Y-m-d H:i:s');
+        $statement = $pdo->prepare($sql);
 
-    //     $statement = $pdo->prepare($sql);
+        $statement->bindValue(':situacao', $situacao->situacao);
+        $statement->bindValue(':ordem', $situacao->ordem);
+        $statement->bindValue(':situacaoId', $situacao->id);
 
-    //     $statement->bindValue(':titulo', $task->titulo);
-    //     $statement->bindValue(':descricao', $task->descricao);
-    //     $statement->bindValue(':dataAtualizacao', $dataAtualizacao);
-    //     $statement->bindValue(':concluido', $task->concluido);
-    //     $statement->bindValue(':taskId', $task->id);
-
-    //     if (!$statement->execute()) {
-    //         throw new Exception("Erro de banco!");
-    //     }
-    // }
+        if (!$statement->execute()) {
+            throw new Exception("Erro de banco!");
+        }
+    }
 
     // public function delete($task)
     // {

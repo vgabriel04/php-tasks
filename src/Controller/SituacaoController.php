@@ -68,42 +68,50 @@ class SituacaoController
         }
     }
 
-    // public function update($request)
-    // {
-    //     try {
-    //         if (property_exists($request, 'taskId') == FALSE || $request->taskId == NULL) {
-    //             $mensagem = "Necessario preencher o campo taskId";
-    //             $retorno = [
-    //                 "mensagem" => $mensagem
-    //             ];
-    //             JsonResponse::send($retorno, 400);
-    //         }
+    public function update($request)
+    {
+        try {
+            if (property_exists($request, 'situacaoId') == FALSE || $request->situacaoId == NULL) {
+                $mensagem = "Necessario preencher o campo taskId";
+                $retorno = [
+                    "mensagem" => $mensagem
+                ];
+                JsonResponse::send($retorno, 400);
+            }
 
-    //         if (property_exists($request, 'titulo') == FALSE || $request->titulo == NULL) {
-    //             $mensagem = "Necessario preencher o campo de titulo";
-    //             $retorno = [
-    //                 "mensagem" => $mensagem,
-    //             ];
-    //             JsonResponse::send($retorno, 400);
-    //         }
+            if (property_exists($request, 'situacao') == FALSE || $request->situacao == NULL) {
+                $mensagem = "Necessario preencher o campo de situação";
+                $retorno = [
+                    "mensagem" => $mensagem,
+                ];
+                JsonResponse::send($retorno, 400);
+            }
 
-    //         $task = new Task;
-    //         $task->titulo = $request->titulo;
-    //         $task->descricao = $request->descricao ?? NULL;
-    //         $task->id = $request->taskId;
-    //         $this->taskService->update($task);
+            if (property_exists($request, 'ordem') == FALSE || $request->ordem == NULL) {
+                $mensagem = "Necessario preencher o campo de ordem";
+                $retorno = [
+                    "mensagem" => $mensagem,
+                ];
+                JsonResponse::send($retorno, 400);
+            }
 
-    //         $retorno = [
-    //             "mensagem" => "Tudo Certo",
-    //         ];
-    //         JsonResponse::send($retorno, 200);
-    //     } catch (\Error $e) {
-    //         $retorno = [
-    //             "mensagem" => $e->getMessage(),
-    //         ];
-    //         JsonResponse::send($retorno, 500);
-    //     }
-    // }
+            $situacao = new Situacao;
+            $situacao->situacao = $request->situacao;
+            $situacao->ordem = $request->ordem;
+            $situacao->id = $request->situacaoId;
+            $this->situacaoService->update($situacao);
+
+            $retorno = [
+                "mensagem" => "Tudo Certo",
+            ];
+            JsonResponse::send($retorno, 200);
+        } catch (\Error $e) {
+            $retorno = [
+                "mensagem" => $e->getMessage(),
+            ];
+            JsonResponse::send($retorno, 500);
+        }
+    }
 
     // public function delete($request)
     // {
