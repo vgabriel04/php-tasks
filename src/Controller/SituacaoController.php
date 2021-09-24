@@ -60,7 +60,7 @@ class SituacaoController
                 "mensagem" => "Tudo Certo",
             ];
             JsonResponse::send($retorno, 201);
-        } catch (\Error $e) {
+        } catch (\Exception $e) {
             $retorno = [
                 "mensagem" => $e->getMessage(),
             ];
@@ -105,7 +105,7 @@ class SituacaoController
                 "mensagem" => "Tudo Certo",
             ];
             JsonResponse::send($retorno, 200);
-        } catch (\Error $e) {
+        } catch (\Exception $e) {
             $retorno = [
                 "mensagem" => $e->getMessage(),
             ];
@@ -113,34 +113,35 @@ class SituacaoController
         }
     }
 
-    // public function delete($request)
-    // {
-    //     try {
-    //         if (property_exists($request, 'taskId') == FALSE || $request->taskId == NULL) {
-    //             $mensagem = "Necessario preencher o campo taskId";
-    //             JsonResponse::send(["mensagem" => $mensagem], 400);
-    //         }
+    public function delete($request)
+    {
+        try {
+            if (property_exists($request, 'situacaoId') == FALSE || $request->situacaoId == NULL) {
+                $mensagem = "Necessario preencher o campo situacaoId";
+                JsonResponse::send(["mensagem" => $mensagem], 400);
+            }
 
-    //         $task = new Task;
-    //         $task->id = $request->taskId;
-    //         $this->taskService->delete($task);
+            $situacao = new Situacao();
+            $situacao->id = $request->situacaoId;
+            $this->situacaoService->delete($situacao);
 
-    //         JsonResponse::send(["mensagem" => "Tudo Certo"], 200);
-    //     } catch (\Error $e) {
-    //         JsonResponse::send(["mensagem" => $e->getMessage()], 500);
-    //     }
-    // }
+            JsonResponse::send(["mensagem" => "Tudo Certo"], 200);
+        } catch (\Exception $e) {
+            JsonResponse::send(["mensagem" => $e->getMessage()], 500);
+        }
+    }
 
-    // public function find($request)
-    // {
-    //     try {
-    //         $task = $this->taskService->find($request->taskId);
-    //         JsonResponse::send($task, 200);
-    //     } catch (\Exception $e) {
-    //         $mensagem = ['mensagem' => $e->getMessage()];
-    //         JsonResponse::send($mensagem, 500);
-    //         // $jsonResponse->send($mensagem, 500);
-    //     }
-    // }
-
+    public function find($request)
+    {
+        try {
+            $situacao = new Situacao();
+            $situacao->id = $request->situacaoId;
+            $situacao = $this->situacaoService->find($situacao);
+            JsonResponse::send($situacao, 200);
+        } catch (\Exception $e) {
+            $mensagem = ['mensagem' => $e->getMessage()];
+            JsonResponse::send($mensagem, 500);
+            // $jsonResponse->send($mensagem, 500);
+        }
+    }
 }

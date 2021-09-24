@@ -42,4 +42,28 @@ class Repository
         }
         return $objects;
     }
+
+    public function insert($values)
+    {
+        $entity = $this->entity;
+        $tablename = $entity::tablename;
+
+        $fields = array_keys($values);
+        $fields = implode(',', $fields);
+
+        $binds = array_pad([], count($values), '?');
+        $binds = implode(',', $binds);
+
+        $values = array_values($values);
+
+        $pdo = DbConnection::get();
+
+        $sql = "insert into $tablename ($fields) values ($binds)";
+
+        $statement = $pdo->prepare($sql);
+
+        if (!$statement->execute($values)) {
+            throw new Exception("Erro de banco!");
+        }
+    }
 }

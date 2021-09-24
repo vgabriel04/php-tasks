@@ -14,12 +14,12 @@ class TaskService
 {
     public function findAll()
     {
-
         $repository = Repository::forClass(Task::class);
 
         $tasks = $repository->findAll();
 
         foreach ($tasks as $key => $task) {
+            $task->fillRelation();
             $tasks[$key] = $task->fillReadableDates();
             // $task->fillReadableDates();
             // $tasks[$key] = $task;
@@ -56,24 +56,21 @@ class TaskService
 
     public function create($task)
     {
-        $pdo = DbConnection::get();
-
-        $sql = "insert into tasks (titulo, descricao, dataCriacao, dataAtualizacao) values (:titulo, :descricao, :dataCriacao, :dataAtualizacao)"; //implementar depois
-
         $dataCricao = date('Y-m-d H:i:s');
         $dataAtualizacao = date('Y-m-d H:i:s');
 
-        $statement = $pdo->prepare($sql);
 
-        $statement->bindValue(':titulo', $task->titulo);
-        $statement->bindValue(':descricao', $task->descricao);
-        $statement->bindValue(':dataCriacao', $dataCricao);
-        $statement->bindValue(':dataAtualizacao', $dataAtualizacao);
+        $repository = Repository::forClass(Task::class);
 
-        if (!$statement->execute()) {
-            throw new Exception("Erro de banco!");
-        }
+        $tasks = $repository->insert([
+            'titulo' => $task->titulo,
+            'descricao' => $task->descricao,
+            'dataCriacao' => $dataCricao,
+            'dataAtualizacao' => $dataAtualizacao,
+            'situacao' => $task->situacao,
+        ]);
     }
+
 
     public function update($task)
     {

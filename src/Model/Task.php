@@ -3,6 +3,7 @@
 namespace PhpTask\Model;
 
 use PhpTask\Model\Model;
+use PhpTask\Service\SituacaoService;
 
 class Task extends Model
 {
@@ -14,6 +15,7 @@ class Task extends Model
     public $dataCriacao;
     public $dataAtualizacao;
     public $concluido;
+    public $situacao;
 
     public $dataCriacaoReadable;
     public $dataAtualizacaoReadable;
@@ -46,6 +48,19 @@ class Task extends Model
         $taskObject->dataCriacao = $arrayData['datacriacao'];
         $taskObject->dataAtualizacao = $arrayData['dataatualizacao'];
         $taskObject->concluido = $arrayData['concluido'];
+        $taskObject->situacao = $arrayData['situacao'];
         return $taskObject;
+    }
+
+    public function fillRelation()
+    {
+        if (!is_object($this->situacao)) {
+            $situacao = new Situacao();
+            $situacao->id = $this->situacao; //situacao é só um id ainda
+            $situacaoService = new SituacaoService();
+            $situacao = $situacaoService->find($situacao);
+            $this->situacao = $situacao;
+        }
+        return $this;
     }
 }

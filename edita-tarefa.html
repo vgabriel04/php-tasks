@@ -6,9 +6,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
     <title>Document</title>
-
   </head>
   <body>
+    <h1>PHP Task</h1>
+
+    <div>
+      <a class="btn" href="lista-tarefas.html">Tarefas</a>
+      <a class="btn" href="lista-situacoes.html">Situacoes</a>
+    </div>
+
+    <h2>Edita Tarefa</h2>
     <form>
       <label for="titulo">Titulo</label><br />
       <input
@@ -22,7 +29,6 @@
       <input id="descricao" type="text" name="descricao" /><br /><br />
 
       <button type="button" onclick="editaTarefa()">Alterar</button>
-      
     </form>
 
     <script>
@@ -44,30 +50,30 @@
         inputDescricao.value = tarefa.descricao
       }
 
-      async function editaTarefa (){
+      async function editaTarefa() {
         const parametrosUrl = new URLSearchParams(location.search)
         const tarefaId = parametrosUrl.get('tarefaId')
-        let tituloTarefa = document.getElementById("titulo").value
-        let descricaoTarefa = document.getElementById ("descricao").value
+        let tituloTarefa = document.getElementById('titulo').value
+        let descricaoTarefa = document.getElementById('descricao').value
 
         let data = {
-          "titulo" : tituloTarefa,
-          "descricao" : descricaoTarefa,
+          titulo: tituloTarefa,
+          descricao: descricaoTarefa
         }
-        let tarefasResponse = await fetch (`/task?taskId=${tarefaId}`, {
+        let tarefasResponse = await fetch(`/task?taskId=${tarefaId}`, {
           method: 'PUT',
           body: JSON.stringify(data)
         })
 
         tarefasResponseDado = await tarefasResponse.json()
         // if (tarefasResponse.ok){
-          alert(tarefasResponseDado.mensagem)//vai buscar a mensagem no PHP e joga na tela
+        alert(tarefasResponseDado.mensagem) //vai buscar a mensagem no PHP e joga na tela
         // }else{
         //   alert(tarefasResponseDado.mensagem)
         // }
-        console.log (tarefasResponseDado)
+        console.log(tarefasResponseDado)
       }
-      let taskId = null;
+      let taskId = null
 
       carregaTarefa().then(tarefa => {
         preencheFormPreliminar(tarefa)

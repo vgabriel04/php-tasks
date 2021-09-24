@@ -4,6 +4,16 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+.situacaoTarefa {
+  font-size: 80%;
+  font-style: italic;
+}
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
 .linhaTarefa {
   /* background: #eeeeee; */
   /* background: red; */

@@ -37,14 +37,14 @@ class Kernel
 
     private function routerConfig()
     {
-        $this->router = RouterConfig::getRoutes(); 
+        $this->router = RouterConfig::getRoutes();
         // acessando o método getRouter que é static "::"
-    } 
+    }
 
     private function runAction()
     {
         $rotaEncontrada = $this->router->findRoute($this->method, $this->uri);
-        $nomeDaClasse = "PhpTask\\Controller\\$rotaEncontrada->controller";
+        $nomeDaClasse = $rotaEncontrada->controller;
         $controller = new $nomeDaClasse();
         $response = $controller->{$rotaEncontrada->action}($this->request);
         // echo $response->process();

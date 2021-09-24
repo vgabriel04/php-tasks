@@ -22,12 +22,38 @@
         return tarefas
       }
 
+      async function carregaSituacoes() {
+        let response = await fetch('/situacoes', {
+          method: 'GET'
+        })
+        situacoes = await response.json()
+        return situacoes
+      }
+
+      function montaFormSituacoes(situacoes) {
+        html = `
+        <label for="situacoes">Situacoes</label>
+        <select id="situacao" name="situacao">`
+
+        situacoes.forEach(situacao => {
+          html += `<option value="${situacao.id}">${situacao.ordem}-${situacao.situacao}</option>`
+        })
+
+        html += `</select>`
+
+        let divSituacoes = document.getElementById('situacoes')
+        divSituacoes.innerHTML = html
+      }
+
       async function criaTarefa() {
         let tituloTarefa = document.getElementById('titulo').value
         let descricaoTarefa = document.getElementById('descricao').value
+        let situacaoTarefa = document.getElementById('situacao').value
+
         let data = {
           titulo: tituloTarefa,
-          descricao: descricaoTarefa
+          descricao: descricaoTarefa,
+          situacao: situacaoTarefa
         }
         let tarefasResponse = await fetch('/task', {
           method: 'POST',
@@ -70,7 +96,7 @@
         console.log(tarefas)
         console.log(divListaTarefas)
 
-        let meuHtmlParaRenderizar = '<p>Lista de tarefas</p>'
+        let meuHtmlParaRenderizar = ''
         for (let i = 0; i < tarefas.length; i++) {
           let concluido = `<input type="checkbox" id="scales" name="scales" onclick="concluiTarefas(${tarefas[i].id})">`
           if (tarefas[i].concluido == '1') {
@@ -81,10 +107,26 @@
           // dataCriacaoExtenso = `${dataCriacao.getDate()}/${dataCriacao.getMonth()+1}/${dataCriacao.getFullYear()}`
           // console.log('dataCriacaoExtenso', dataCriacaoExtenso)
           dataCriacaoExtenso = tarefas[i].dataCriacaoReadable
-          meuHtmlParaRenderizar += `<div class="linhaTarefa"><div> ${concluido} ${dataCriacaoExtenso} -- ${tarefas[i].titulo} : ${tarefas[i].descricao}</div><div class="flex-shrink-none"> <a class="btn sm" href = "edita-tarefa.html?tarefaId=${tarefas[i].id}"> Editar </a> <a class="btn sm" onclick="excluiTarefa(${tarefas[i].id})"> Excluir </a> </div></div>`
+          meuHtmlParaRenderizar += `
+          <div class="linhaTarefa">
+            <div class="flex-row">
+              <div>${concluido}</div>
+              <div>
+                <div class="situacaoTarefa">${tarefas[i].situacao.situacao}</div>
+                <div> ${dataCriacaoExtenso} -- ${tarefas[i].titulo} : ${tarefas[i].descricao}</div>
+              </div>
+            </div>
+            <div class="flex-shrink-none">
+              <a class="btn sm" href = "edita-tarefa.html?tarefaId=${tarefas[i].id}"> Editar </a>
+              <a class="btn sm" onclick="excluiTarefa(${tarefas[i].id})"> Excluir </a>
+            </div>
+          </div>`
         }
         divListaTarefas.innerHTML = meuHtmlParaRenderizar
       }
+      carregaSituacoes().then(situacoes => {
+        montaFormSituacoes(situacoes)
+      })
       renderTarefas()
     </script>
 
@@ -95,6 +137,7 @@
       <a class="btn" href="lista-situacoes.html">Situacoes</a>
     </div>
 
+    <h2>Nova Tarefa</h2>
     <form>
       <label for="titulo">Título</label><br />
       <input
@@ -107,9 +150,11 @@
       <label for="descricao">Descrição</label><br />
       <input id="descricao" type="text" name="descricao" /><br /><br />
 
+      <div id="situacoes"></div>
+
       <a class="btn" onclick="criaTarefa()">Criar</a>
     </form>
-
+    <h2>Lista de Tarefas</h2>
     <div id="lista-tarefas"></div>
   </body>
 </html>

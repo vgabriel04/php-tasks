@@ -42,12 +42,20 @@ class TaskController
                 ];
                 JsonResponse::send($retorno, 400);
             }
+            if (property_exists($request, 'situacao') == FALSE || $request->situacao == NULL || $request->situacao == '') {
+                $mensagem = "Necessario preencher o campo de situacao";
+                $retorno = [
+                    "mensagem" => $mensagem,
+                ];
+                JsonResponse::send($retorno, 400);
+            }
 
             $descricao = $request->descricao ?? NULL;
 
             $task = new Task();
             $task->titulo = $request->titulo;
             $task->descricao = $descricao;
+            $task->situacao = $request->situacao;
 
             $this->taskService->create($task);
 

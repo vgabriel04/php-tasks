@@ -8,6 +8,14 @@
     <title>Document</title>
   </head>
   <body>
+    <h1>PHP Task</h1>
+
+    <div>
+      <a class="btn" href="lista-tarefas.html">Tarefas</a>
+      <a class="btn" href="lista-situacoes.html">Situacoes</a>
+    </div>
+
+    <h2>Edita Situação</h2>
     <form>
       <label for="situacao">situacao</label><br />
       <input
@@ -39,6 +47,7 @@
       }
 
       function preencheFormPreliminar(situacao) {
+        console.log('situacao', situacao)
         let inputOrdem = document.getElementById('ordem')
         let inputDescricao = document.getElementById('situacao')
         inputOrdem.value = situacao.ordem
