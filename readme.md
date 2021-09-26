@@ -13,5 +13,6 @@ Faz uso das seguintes práticas:
 - Clean Architecture (Controller, Service, Repository)
 - API REST
 - JS Fetch API
+- validador modularizado e generalista
 
 O "Kernel" do framework experimental foi construído durante o desenvolvimento da aplicação.

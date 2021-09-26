@@ -35,39 +35,14 @@ class TaskController
     public function create($request)
     {
         try {
-            if (property_exists($request, 'titulo') == FALSE || $request->titulo == NULL || $request->titulo == '') {
-                $mensagem = "Necessario preencher o campo de titulo";
-                $retorno = [
-                    "mensagem" => $mensagem,
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-            if (property_exists($request, 'situacao') == FALSE || $request->situacao == NULL || $request->situacao == '') {
-                $mensagem = "Necessario preencher o campo de situacao";
-                $retorno = [
-                    "mensagem" => $mensagem,
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-
-            $descricao = $request->descricao ?? NULL;
-
-            $task = new Task();
-            $task->titulo = $request->titulo;
-            $task->descricao = $descricao;
-            $task->situacao = $request->situacao;
-
+            $task = $this->validateTaskCreate($request);
             $this->taskService->create($task);
-
             $retorno = [
                 "mensagem" => "Tudo Certo",
             ];
             JsonResponse::send($retorno, 201);
-        } catch (\Error $e) {
-            $retorno = [
-                "mensagem" => $e->getMessage(),
-            ];
-            JsonResponse::send($retorno, 500);
+        } catch (\Exception $e) {
+            JsonResponse::send(["mensagem" => $e->getMessage()], 500);
         }
     }
 
@@ -159,5 +134,48 @@ class TaskController
         } catch (\Exception $e) {
             JsonResponse::send(["mensagem" => $e->getMessage()], 500);
         }
+    }
+
+
+    private function validateTaskCreate($requestData)
+    {
+        $validator = HttpValidator::create()->forData($requestData, true);
+
+        $validator->exists('titulo')
+            ->withMessage("Necessario preencher o campo título")
+            ->validate();
+        $validator->notNull('titulo')
+            ->withMessage("Necessario preencher o campo título")
+            ->validate();
+        $validator->not('titulo', '')
+            ->withMessage("Necessario preencher o campo título")
+            ->validate();
+
+        $validator->exists('descricao')
+            ->withMessage("Necessario preencher o campo descrição")
+            ->validate();
+        $validator->notNull('descricao')
+            ->withMessage("Necessario preencher o campo descrição")
+            ->validate();
+        $validator->not('descricao', '')
+            ->withMessage("Necessario preencher o campo descrição")
+            ->validate();
+
+
+        $validator->exists('situacao')
+            ->withMessage("Necessario preencher o campo situacao")
+            ->validate();
+        $validator->notNull('situacao')
+            ->withMessage("Necessario preencher o campo situacao")
+            ->validate();
+        $validator->not('situacao', '')
+            ->withMessage("Necessario preencher o campo situacao")
+            ->validate();
+
+        $task = new Task;
+        $task->titulo = $requestData->titulo;
+        $task->descricao = $requestData->descricao;
+        $task->situacao = $requestData->situacao;
+        return $task;
     }
 }

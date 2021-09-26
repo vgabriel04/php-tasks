@@ -7,7 +7,10 @@
             "email": "vgss04@outlook.com"
         }
     ],
-    "require": {},
+    "require": {
+        "phpunit/phpunit": "^9.5",
+        "guzzlehttp/guzzle": "^7.3"
+    },
     "autoload": {
         "psr-4": {
             "PhpTask\\": "src/"

@@ -59,7 +59,6 @@ class TaskService
         $dataCricao = date('Y-m-d H:i:s');
         $dataAtualizacao = date('Y-m-d H:i:s');
 
-
         $repository = Repository::forClass(Task::class);
 
         $tasks = $repository->insert([

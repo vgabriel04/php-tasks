@@ -20,13 +20,21 @@ class Repository
         return $repository;
     }
 
-    public function findAll()
+    public function findAll($orderByColumn = null, $orderByOrder = null)
     {
+
         $entity = $this->entity;
         $tablename = $entity::tablename;
 
         $pdo = DbConnection::get();
         $sql = "select * from $tablename";
+
+        if ($orderByColumn != null && ($orderByOrder == 'asc' || $orderByOrder == 'desc')) {
+            $sql .= " order by $orderByColumn $orderByOrder";
+        } elseif ($orderByColumn != null && ($orderByOrder != 'asc' || $orderByOrder != 'desc')) {
+            throw new Exception("Você tentou realizar um orderBy, mas passou $orderByOrder ou $orderByOrder digitados incorretamente.");
+        }
+
         $statement = $pdo->prepare($sql);
 
         if (!$statement->execute()) {

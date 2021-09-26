@@ -35,96 +35,34 @@ class SituacaoController
     public function create($request)
     {
         try {
-            if (property_exists($request, 'situacao') == FALSE || $request->situacao == NULL || $request->situacao == '') {
-                $mensagem = "Necessario preencher o campo de situacao";
-                $retorno = [
-                    "mensagem" => $mensagem,
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-            if (property_exists($request, 'ordem') == FALSE || $request->ordem == NULL || $request->ordem == '') {
-                $mensagem = "Necessario preencher o campo de ordem";
-                $retorno = [
-                    "mensagem" => $mensagem,
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-
-            $situacao = new Situacao();
-            $situacao->situacao = $request->situacao;
-            $situacao->ordem = $request->ordem;
-
+            $situacao = $this->validateSituacaoCreate($request);
             $this->situacaoService->create($situacao);
-
             $retorno = [
                 "mensagem" => "Tudo Certo",
             ];
             JsonResponse::send($retorno, 201);
         } catch (\Exception $e) {
-            $retorno = [
-                "mensagem" => $e->getMessage(),
-            ];
-            JsonResponse::send($retorno, 500);
+            JsonResponse::send(["mensagem" => $e->getMessage()], 500);
         }
     }
 
     public function update($request)
     {
         try {
-            if (property_exists($request, 'situacaoId') == FALSE || $request->situacaoId == NULL) {
-                $mensagem = "Necessario preencher o campo taskId";
-                $retorno = [
-                    "mensagem" => $mensagem
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-
-            if (property_exists($request, 'situacao') == FALSE || $request->situacao == NULL) {
-                $mensagem = "Necessario preencher o campo de situação";
-                $retorno = [
-                    "mensagem" => $mensagem,
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-
-            if (property_exists($request, 'ordem') == FALSE || $request->ordem == NULL) {
-                $mensagem = "Necessario preencher o campo de ordem";
-                $retorno = [
-                    "mensagem" => $mensagem,
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-
-            $situacao = new Situacao;
-            $situacao->situacao = $request->situacao;
-            $situacao->ordem = $request->ordem;
-            $situacao->id = $request->situacaoId;
+            $situacao = $this->validateSituacaoUpdate($request);
             $this->situacaoService->update($situacao);
 
-            $retorno = [
-                "mensagem" => "Tudo Certo",
-            ];
-            JsonResponse::send($retorno, 200);
+            JsonResponse::send(["mensagem" => "Tudo Certo"], 200);
         } catch (\Exception $e) {
-            $retorno = [
-                "mensagem" => $e->getMessage(),
-            ];
-            JsonResponse::send($retorno, 500);
+            JsonResponse::send(["mensagem" => $e->getMessage()], 500);
         }
     }
 
     public function delete($request)
     {
         try {
-            if (property_exists($request, 'situacaoId') == FALSE || $request->situacaoId == NULL) {
-                $mensagem = "Necessario preencher o campo situacaoId";
-                JsonResponse::send(["mensagem" => $mensagem], 400);
-            }
-
-            $situacao = new Situacao();
-            $situacao->id = $request->situacaoId;
+            $situacao = $this->validateSituacaoId($request);
             $this->situacaoService->delete($situacao);
-
             JsonResponse::send(["mensagem" => "Tudo Certo"], 200);
         } catch (\Exception $e) {
             JsonResponse::send(["mensagem" => $e->getMessage()], 500);
@@ -134,14 +72,79 @@ class SituacaoController
     public function find($request)
     {
         try {
-            $situacao = new Situacao();
-            $situacao->id = $request->situacaoId;
+            $situacao = $this->validateSituacaoId($request);
             $situacao = $this->situacaoService->find($situacao);
             JsonResponse::send($situacao, 200);
         } catch (\Exception $e) {
-            $mensagem = ['mensagem' => $e->getMessage()];
-            JsonResponse::send($mensagem, 500);
+            JsonResponse::send(['mensagem' => $e->getMessage()], 500);
             // $jsonResponse->send($mensagem, 500);
         }
+    }
+
+    private function validateSituacaoId($requestData)
+    {
+        $validator = HttpValidator::create()->forData($requestData, true);
+        $validator->exists('situacaoId')
+            ->withMessage("Necessario preencher o campo situacaoId")
+            ->validate();
+        $validator->notNull('situacaoId')
+            ->withMessage("Necessario preencher o campo situacaoId")
+            ->validate();
+        $validator->not('situacaoId', '')
+            ->withMessage("Necessario preencher o campo situacaoId")
+            ->validate();
+
+        $situacao = new Situacao;
+        $situacao->id = $requestData->situacaoId;
+        return $situacao;
+    }
+
+    private function validateSituacaoCreate($requestData)
+    {
+        $validator = HttpValidator::create()->forData($requestData, true);
+
+        $validator->exists('situacao')
+            ->withMessage("Necessario preencher o campo situacao")
+            ->validate();
+        $validator->notNull('situacao')
+            ->withMessage("Necessario preencher o campo situacao")
+            ->validate();
+        $validator->not('situacao', '')
+            ->withMessage("Necessario preencher o campo situacao")
+            ->validate();
+
+        $validator->exists('ordem')
+            ->withMessage("Necessario preencher o campo ordem")
+            ->validate();
+        $validator->notNull('ordem')
+            ->withMessage("Necessario preencher o campo ordem")
+            ->validate();
+        $validator->not('ordem', '')
+            ->withMessage("Necessario preencher o campo ordem")
+            ->validate();
+
+        $situacao = new Situacao;
+        $situacao->situacao = $requestData->situacao;
+        $situacao->ordem = $requestData->ordem;
+        return $situacao;
+    }
+
+    private function validateSituacaoUpdate($requestData)
+    {
+        $validator = HttpValidator::create()->forData($requestData, true);
+
+        $validator->exists('situacaoId')
+            ->withMessage("Necessario preencher o campo situacaoId")
+            ->validate();
+        $validator->notNull('situacaoId')
+            ->withMessage("Necessario preencher o campo situacaoId")
+            ->validate();
+        $validator->not('situacaoId', '')
+            ->withMessage("Necessario preencher o campo situacaoId")
+            ->validate();
+
+        $situacao = $this->validateSituacaoCreate($requestData);
+        $situacao->id = $requestData->situacaoId;
+        return $situacao;
     }
 }

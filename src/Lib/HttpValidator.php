@@ -44,6 +44,14 @@ class HttpValidator
         return $this;
     }
 
+    public function not($propertyName, $notValue)
+    {
+        $this->rule['propertyName'] = $propertyName;
+        $this->rule['notValue'] = $notValue;
+        $this->rule['rule'] = 'not';
+        return $this;
+    }
+
     public function withMessage($message)
     {
         $this->rule['message'] = $message;
@@ -55,6 +63,7 @@ class HttpValidator
         $rule = $this->rule['rule'];
         $data = $this->data;
         $propertyName = $this->rule['propertyName'];
+        $notValue = isset($this->rule['notValue']) ? $this->rule['notValue'] : null;
         $isObject = $this->isObject;
 
         switch ($rule) {
@@ -70,6 +79,13 @@ class HttpValidator
                     if ($data[$propertyName] == null) $this->throwError();
                 } else {
                     if ($data->$propertyName == null) $this->throwError();
+                }
+                break;
+            case 'not':
+                if ($isObject !== true) {
+                    if ($data[$propertyName] == $notValue) $this->throwError();
+                } else {
+                    if ($data->$propertyName == $notValue) $this->throwError();
                 }
                 break;
             default:

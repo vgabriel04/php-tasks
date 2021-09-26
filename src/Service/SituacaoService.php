@@ -15,7 +15,7 @@ class SituacaoService
     public function findAll()
     {
         $repository = Repository::forClass(Situacao::class);
-        $situacao = $repository->findAll();
+        $situacao = $repository->findAll('ordem', 'asc');
         return $situacao;
     }
 
