@@ -9,6 +9,10 @@ body {
   font-style: italic;
 }
 
+.border {
+  border: 1px solid #00000022;
+}
+
 .flex-row {
   display: flex;
   flex-direction: row;
@@ -73,4 +77,29 @@ a.btn.sm,
 button.btn.sm,
 input.btn.sm {
   font-size: 80%;
+}
+
+.quadroKanban {
+}
+.colunaKanban {
+  border: 1px solid black;
+  padding: 10px 10px;
+}
+.tituloColunaKanban {
+  margin: 0px;
+  padding: 0px;
+  min-width: 220px;
+  max-width: 220px;
+}
+
+.cardKanban {
+  border-radius: 5px;
+  background-color: #aaaaaa22;
+  margin: 5px auto;
+  padding: 10px;
+  min-width: 220px;
+  max-width: 220px;
+}
+.cardKanban:hover {
+  background-color: #aaaaaa33;
 }

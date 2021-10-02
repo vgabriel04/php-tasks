@@ -96,32 +96,34 @@
         console.log(tarefas)
         console.log(divListaTarefas)
 
+        let situacoes = await carregaSituacoes()
+
+        situacoes.forEach(situacao => {
+          if (situacao.tarefas == undefined) situacao.tarefas = []
+          tarefas.forEach(tarefa => {
+            if (tarefa.situacao.id == situacao.id) {
+              situacao.tarefas.push(tarefa)
+            }
+          })
+        })
+        console.log('situacoes', situacoes)
+
         let meuHtmlParaRenderizar = ''
-        for (let i = 0; i < tarefas.length; i++) {
-          let concluido = `<input type="checkbox" id="scales" name="scales" onclick="concluiTarefas(${tarefas[i].id})">`
-          if (tarefas[i].concluido == '1') {
-            concluido = `<input type="checkbox" id="scales" name="scales" checked onclick="concluiTarefas(${tarefas[i].id})">`
-          }
-          // let dataCriacao = new Date(tarefas[i].datacriacao)
-          // console.log('dataCriacao', dataCriacao)
-          // dataCriacaoExtenso = `${dataCriacao.getDate()}/${dataCriacao.getMonth()+1}/${dataCriacao.getFullYear()}`
-          // console.log('dataCriacaoExtenso', dataCriacaoExtenso)
-          dataCriacaoExtenso = tarefas[i].dataCriacaoReadable
-          meuHtmlParaRenderizar += `
-          <div class="linhaTarefa">
-            <div class="flex-row">
-              <div>${concluido}</div>
-              <div>
-                <div class="situacaoTarefa">${tarefas[i].situacao.situacao}</div>
-                <div> ${dataCriacaoExtenso} -- ${tarefas[i].titulo} : ${tarefas[i].descricao}</div>
-              </div>
-            </div>
-            <div class="flex-shrink-none">
-              <a class="btn sm" href = "edita-tarefa.html?tarefaId=${tarefas[i].id}"> Editar </a>
-              <a class="btn sm" onclick="excluiTarefa(${tarefas[i].id})"> Excluir </a>
-            </div>
-          </div>`
-        }
+
+        meuHtmlParaRenderizar += `<div class="flex-row quadroKanban">`
+
+        situacoes.forEach(situacao => {
+          meuHtmlParaRenderizar += `<div class="flex-column colunaKanban">`
+          meuHtmlParaRenderizar += `<h3 class="tituloColunaKanban">${situacao.situacao}</h3>`
+
+          situacao.tarefas.forEach(tarefa => {
+            meuHtmlParaRenderizar += `<a href = "edita-tarefa.html?tarefaId=${tarefa.id}">`
+            meuHtmlParaRenderizar += `<div class="cardKanban">`
+            meuHtmlParaRenderizar += `${tarefa.titulo}`
+            meuHtmlParaRenderizar += `</div></a>`
+          })
+          meuHtmlParaRenderizar += `</div>`
+        })
         divListaTarefas.innerHTML = meuHtmlParaRenderizar
       }
       carregaSituacoes().then(situacoes => {
@@ -135,8 +137,6 @@
     <div>
       <a class="btn" href="lista-tarefas.html">Tarefas</a>
       <a class="btn" href="lista-situacoes.html">Situacoes</a>
-      <a class="btn" href="kanban-tarefas.html">Kanban</a>
-
     </div>
 
     <h2>Nova Tarefa</h2>
