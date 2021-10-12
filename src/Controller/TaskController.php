@@ -49,37 +49,12 @@ class TaskController
     public function update($request)
     {
         try {
-            if (property_exists($request, 'taskId') == FALSE || $request->taskId == NULL) {
-                $mensagem = "Necessario preencher o campo taskId";
-                $retorno = [
-                    "mensagem" => $mensagem
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-
-            if (property_exists($request, 'titulo') == FALSE || $request->titulo == NULL) {
-                $mensagem = "Necessario preencher o campo de titulo";
-                $retorno = [
-                    "mensagem" => $mensagem,
-                ];
-                JsonResponse::send($retorno, 400);
-            }
-
-            $task = new Task;
-            $task->titulo = $request->titulo;
-            $task->descricao = $request->descricao ?? NULL;
-            $task->id = $request->taskId;
+            $task = $this->validateTaskUpdate($request);
             $this->taskService->update($task);
 
-            $retorno = [
-                "mensagem" => "Tudo Certo",
-            ];
-            JsonResponse::send($retorno, 200);
-        } catch (\Error $e) {
-            $retorno = [
-                "mensagem" => $e->getMessage(),
-            ];
-            JsonResponse::send($retorno, 500);
+            JsonResponse::send(["mensagem" => "Tudo Certo"], 200);
+        } catch (\Exception $e) {
+            JsonResponse::send(["mensagem" => $e->getMessage()], 500);
         }
     }
 
@@ -136,6 +111,24 @@ class TaskController
         }
     }
 
+    private function validateTaskUpdate($requestData)
+    {
+        $validator = HttpValidator::create()->forData($requestData, true);
+
+        $validator->exists('taskId')
+            ->withMessage("Necessario preencher o campo taskId")
+            ->validate();
+        $validator->notNull('taskId')
+            ->withMessage("Necessario preencher o campo taskId")
+            ->validate();
+        $validator->not('taskId', '')
+            ->withMessage("Necessario preencher o campo taskId")
+            ->validate();
+
+        $task = $this->validateTaskCreate($requestData);
+        $task->id = $requestData->taskId;
+        return $task;
+    }
 
     private function validateTaskCreate($requestData)
     {
@@ -154,13 +147,6 @@ class TaskController
         $validator->exists('descricao')
             ->withMessage("Necessario preencher o campo descrição")
             ->validate();
-        $validator->notNull('descricao')
-            ->withMessage("Necessario preencher o campo descrição")
-            ->validate();
-        $validator->not('descricao', '')
-            ->withMessage("Necessario preencher o campo descrição")
-            ->validate();
-
 
         $validator->exists('situacao')
             ->withMessage("Necessario preencher o campo situacao")

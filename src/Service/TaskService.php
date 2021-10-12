@@ -17,7 +17,6 @@ class TaskService
         $repository = Repository::forClass(Task::class);
 
         $tasks = $repository->findAll();
-
         foreach ($tasks as $key => $task) {
             $task->fillRelation();
             $tasks[$key] = $task->fillReadableDates();
@@ -45,6 +44,7 @@ class TaskService
         $taskObject->id = $task['id'];
         $taskObject->titulo = $task['titulo'];
         $taskObject->descricao = $task['descricao'];
+        $taskObject->situacao = $task['situacao'];
         $taskObject->dataCriacao = $task['datacriacao'];
         $taskObject->dataAtualizacao = $task['dataatualizacao'];
         $taskObject->concluido = $task['concluido'];
@@ -75,7 +75,7 @@ class TaskService
     {
         $pdo = DbConnection::get();
 
-        $sql = "update tasks set titulo = :titulo, descricao = :descricao, dataAtualizacao = :dataAtualizacao, concluido = :concluido where id = :taskId";
+        $sql = "update tasks set titulo = :titulo, descricao = :descricao, dataAtualizacao = :dataAtualizacao, concluido = :concluido, situacao = :situacao where id = :taskId";
 
         $dataAtualizacao = date('Y-m-d H:i:s');
 
@@ -85,6 +85,7 @@ class TaskService
         $statement->bindValue(':descricao', $task->descricao);
         $statement->bindValue(':dataAtualizacao', $dataAtualizacao);
         $statement->bindValue(':concluido', $task->concluido);
+        $statement->bindValue(':situacao', $task->situacao);
         $statement->bindValue(':taskId', $task->id);
 
         if (!$statement->execute()) {

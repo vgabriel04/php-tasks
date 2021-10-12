@@ -24,6 +24,7 @@ class Kernel
     {
         $uriTratamento = $_SERVER["REQUEST_URI"];
         $uriTratamento = explode('?', $uriTratamento);
+
         $uri = $uriTratamento[0];
         $method = $_SERVER["REQUEST_METHOD"];
 

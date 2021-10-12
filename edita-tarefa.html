@@ -28,6 +28,8 @@
       <label for="descricao">Descricação</label><br />
       <input id="descricao" type="text" name="descricao" /><br /><br />
 
+      <div id="situacoes"></div>
+
       <button type="button" onclick="editaTarefa()">Alterar</button>
     </form>
 
@@ -44,6 +46,9 @@
       }
 
       function preencheFormPreliminar(tarefa) {
+        carregaSituacoes().then(situacoes => {
+          montaFormSituacoes(situacoes, tarefa)
+        })
         let inputTitulo = document.getElementById('titulo')
         let inputDescricao = document.getElementById('descricao')
         inputTitulo.value = tarefa.titulo
@@ -55,10 +60,12 @@
         const tarefaId = parametrosUrl.get('tarefaId')
         let tituloTarefa = document.getElementById('titulo').value
         let descricaoTarefa = document.getElementById('descricao').value
+        let situacaoTarefa = document.getElementById('situacao').value
 
         let data = {
           titulo: tituloTarefa,
-          descricao: descricaoTarefa
+          descricao: descricaoTarefa,
+          situacao: situacaoTarefa
         }
         let tarefasResponse = await fetch(`/task?taskId=${tarefaId}`, {
           method: 'PUT',
@@ -74,6 +81,32 @@
         console.log(tarefasResponseDado)
       }
       let taskId = null
+
+      async function carregaSituacoes() {
+        let response = await fetch('/situacoes', {
+          method: 'GET'
+        })
+        situacoes = await response.json()
+        return situacoes
+      }
+
+      function montaFormSituacoes(situacoes, tarefa) {
+        html = `
+        <label for="situacoes">Situacoes</label>
+        <select id="situacao" name="situacao">`
+
+        console.log('tarefa', tarefa)
+        console.log('situacoes', situacoes)
+        situacoes.forEach(situacao => {
+          let selected = tarefa.situacao == situacao.id ? 'selected' : ''
+          html += `<option ${selected} value="${situacao.id}">${situacao.ordem}-${situacao.situacao}</option>`
+        })
+
+        html += `</select>`
+
+        let divSituacoes = document.getElementById('situacoes')
+        divSituacoes.innerHTML = html
+      }
 
       carregaTarefa().then(tarefa => {
         preencheFormPreliminar(tarefa)

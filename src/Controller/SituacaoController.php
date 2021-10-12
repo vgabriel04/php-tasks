@@ -21,6 +21,13 @@ class SituacaoController
         $this->situacaoService = new SituacaoService();
     }
 
+/*
+
+mvc = view controller model  
+
+clean architecture = view controller service repository
+*/
+
     public function index($request)
     {
         try {
